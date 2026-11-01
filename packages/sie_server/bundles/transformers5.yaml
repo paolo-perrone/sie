@@ -21,6 +21,9 @@ adapters:
 - sie_server.adapters.pplx_decider.runtime_lora
 # SAM 3 open-vocabulary detection (Sam3Model / Sam3Processor exist only in transformers 5.x).
 - sie_server.adapters.sam3.adapter
+# EmbeddingGemma 2 text embeddings (EmbeddingGemma2Model). The class first
+# shipped in transformers 5.19.0; see models/google__embeddinggemma-2.yaml.
+- sie_server.adapters.embedding_gemma2.adapter
 deps:
   # Transformers 5.x for models requiring newer architecture support
   # (e.g., LightOnOCR-2-1B needs LightOnOcrForConditionalGeneration,
@@ -29,6 +32,11 @@ deps:
   # then 5.17 for Perplexity's pinned native Qwen decision checkpoint;
   # installs already resolved to the latest 5.x, so the floor is the
   # guarantee, not a version change in practice.
+  # EmbeddingGemma2Model first shipped in 5.19.0 (2026-10-06). This range
+  # admits that release, but the committed transformers5 locks resolve to
+  # 5.17.0, which does not contain the class, and 5.19 also requires
+  # huggingface-hub>=1.31 (the lock exception is 1.16.1). Raising the floor
+  # needs a reviewed lock recompile. The root pin stays transformers 4.57.6.
   transformers: '>=5.17,<6'
   # Includes multimodal SparseEncoder (image documents), with the local-code
   # trust boundary validated against this exact release.
